@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <conio.h>
 #include <string.h>
-#include <stdlib.h >
+#include <stdlib.h>
+#include <math.h>
 #define _ERROR {printf("Oshibka! Povtorite vvod! \n");return 0;}
 typedef double dl;
 
@@ -22,8 +23,8 @@ void resh(dl a, dl b, dl c)
 			}
 			else
 			{
-				x1 = (-b + desk(a, b, c)) / (2 * a);
-				x2 = (-b - desk(a, b, c)) / (2 * a);
+				x1 = (-b + sqrt(desk(a, b, c))) / (2 * a);
+				x2 = (-b - sqrt(desk(a, b, c))) / (2 * a);
 				printf("Dva kornya: \n x = %g \n x = %g \n", x1, x2);
 			}
 		}
