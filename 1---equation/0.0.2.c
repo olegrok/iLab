@@ -57,13 +57,13 @@ int input(char* a, char* b, char* c)
 {
     int i=0;
     for(i=0;i<strlen(a);i++)
-        if(!((a[i]>=48)&&(a[i]<=57)||(a[i]==46)))
+        if(!((a[i]>=48)&&(a[i]<=57)||(a[i]==46)||(a[i]==45)))
             _ERROR
     for(i=0;i<strlen(b);i++)
-        if(!((b[i]>=48)&&(b[i]<=57)||(b[i]==46)))
+        if(!((b[i]>=48)&&(b[i]<=57)||(b[i]==46)||(b[i]==45)))
             _ERROR
     for(i=0;i<strlen(c);i++)
-        if(!((c[i]>=48)&&(c[i]<=57)||(c[i]==46)))
+        if(!((c[i]>=48)&&(c[i]<=57)||(c[i]==46)||(c[i]==45)))
             _ERROR
     return 1;
 }
