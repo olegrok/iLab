@@ -17,8 +17,6 @@ int StackOK(const stack_t* stk)
     }
     void AsserStack(stack_t* Stack)
     {
-        if(Stack -> Count == Stack -> Max)
-            printf("WARNING! Stack is FULL!\n");
         assert(StackOK(Stack));
     }
 
@@ -54,6 +52,8 @@ int stack_push(stack_t* Stack, int value)
         Stack -> data [Stack -> Count] = value;
         Stack -> pre = Stack;
         AsserStack(Stack);
+        if(Stack -> Count == Stack -> Max)
+            printf("WARNING! Stack is FULL!\n");
     }
 int stack_pop(stack_t* Stack)
     {
@@ -70,7 +70,7 @@ int main()
 {
     const int c = 3;
     int varible = 0, i = 0;
-    stack_t* NEW = stack_construct(c - 1);
+    stack_t* NEW = stack_construct(c);
     printf("%d\n", NEW -> Max);
 
     for(i = 0; i < c; i++)
@@ -79,11 +79,11 @@ int main()
             stack_push(NEW, varible);
         }
 
-    /*for(i = 0; i < c; i++)
+    for(i = 0; i < c; i++)
         {
             printf("%d\n", stack_pop(NEW));
-        }*/
-
+        }
+    printf("%d",StackOK(NEW));
     destruct_stack(NEW);
     //assert(StackOK(NEW));
     printf("%d",StackOK(NEW));
