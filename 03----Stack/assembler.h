@@ -22,7 +22,7 @@ const char Sub[4] = "sub";
 const char Div[4] = "div";
 
 
-void assembler()
+int assembler()
 {
     FILE *sourse;
     FILE *product;
@@ -36,7 +36,9 @@ void assembler()
         if(strcmp(command, End) == 0)
             {
                 fprintf(product, "%d\n", nEnd);
-                return 0;
+                fclose(sourse);
+                fclose(product);
+                return 1;
             }
 
         if(strcmp(command, Push) == 0)
@@ -135,4 +137,3 @@ void disassembler()
     fclose(sourseimage);
     fclose(product);
 }
-
