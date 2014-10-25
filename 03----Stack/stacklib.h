@@ -13,52 +13,14 @@ int StackOK(const struct stack_t* stk)
         else
             return 0;
     }
-
-
-struct stack_t* stack_construct(int stack_size)
+   void AsserStack(const struct stack_t* Stack, char* name_function)
     {
-        struct stack_t *Stack = (struct stack_t*)calloc(1, sizeof(struct stack_t));
-        Stack -> data = (int*)calloc(stack_size + 1, sizeof(int));
-        Stack -> data[0] = stack_size;
-        Stack -> Count = 0;
-        AsserStack(Stack, __FUNCTION__);
-        return Stack;
-    }
-int destruct_stack(struct stack_t* Stack)
-    {
-        int i = 0;
-        for(i = 0; i <= Stack -> Count; i++)
+        if(!StackOK(Stack))
             {
-               Stack -> data[i] = 0;
+                stack_dump(Stack);
+                printf("Function: %s\n", name_function);
             }
-        Stack -> Count = -1;
-        free(Stack -> data);
-        free(Stack);
-        return 0;
-    }
-int stack_push(struct stack_t* Stack, int value)
-    {
-        AsserStack(Stack, __FUNCTION__);
-        Stack -> data [++Stack -> Count] = value;
-        AsserStack(Stack, __FUNCTION__);
-        if(Stack -> Count == Stack -> data[0])
-            printf("WARNING! Stack is FULL!\n");
-    }
-    int stack_top(struct stack_t* Stack)
-    {
-        return Stack -> data[Stack -> Count];
-    }
-int stack_pop(struct stack_t* Stack)
-    {
-        char YesNo[1];
-        AsserStack(Stack, __FUNCTION__);
-        if(Stack -> Count == 0)
-        {
-            printf("Error! Stack is empty!\n");
-                Stack -> Count--;
-                AsserStack(Stack, __FUNCTION__);
-        }
-        return Stack -> data [Stack -> Count--];
+        assert(StackOK(Stack));
     }
     void stack_dump(const struct stack_t* Stack)
     {
@@ -95,12 +57,49 @@ int stack_pop(struct stack_t* Stack)
         printf("\n\n");
 
     }
-    void AsserStack(const struct stack_t* Stack, char* name_function)
+
+struct stack_t* stack_construct(int stack_size)
     {
-        if(!StackOK(Stack))
+        struct stack_t *Stack = (struct stack_t*)calloc(1, sizeof(struct stack_t));
+        Stack -> data = (int*)calloc(stack_size + 1, sizeof(int));
+        Stack -> data[0] = stack_size;
+        Stack -> Count = 0;
+        AsserStack(Stack, (char*)__FUNCTION__);
+        return Stack;
+    }
+
+int destruct_stack(struct stack_t* Stack)
+    {
+        int i = 0;
+        for(i = 0; i <= Stack -> Count; i++)
             {
-                stack_dump(Stack);
-                printf("Function: %s\n", name_function);
+               Stack -> data[i] = 0;
             }
-        assert(StackOK(Stack));
+        Stack -> Count = -1;
+        free(Stack -> data);
+        free(Stack);
+        return 0;
+    }
+int stack_push(struct stack_t* Stack, int value)
+    {
+        AsserStack(Stack, (char*)__FUNCTION__);
+        Stack -> data [++Stack -> Count] = value;
+        AsserStack(Stack, (char*)__FUNCTION__);
+        if(Stack -> Count == Stack -> data[0])
+            printf("WARNING! Stack is FULL!\n");
+    }
+    int stack_top(struct stack_t* Stack)
+    {
+        return Stack -> data[Stack -> Count];
+    }
+int stack_pop(struct stack_t* Stack)
+    {
+        AsserStack(Stack, (char*)__FUNCTION__);
+        if(Stack -> Count == 0)
+        {
+            printf("Error! Stack is empty!\n");
+                Stack -> Count--;
+                AsserStack(Stack, (char*)__FUNCTION__);
+        }
+        return Stack -> data [Stack -> Count--];
     }
