@@ -8,7 +8,7 @@ struct stack_t
     };
 int StackOK(const struct stack_t* stk)
     {
-        if((stk && stk -> data && stk -> Count >= 0 && stk -> Count <= stk -> data[0]) != 0)
+        if(stk && stk -> data && stk -> Count >= 0 && stk -> Count <= stk -> data[0] && stk -> data[0])
             return 1;
         else
             return 0;
@@ -39,8 +39,7 @@ int destruct_stack(struct stack_t* Stack)
 int stack_push(struct stack_t* Stack, int value)
     {
         AsserStack(Stack, __FUNCTION__);
-        Stack -> Count++;
-        Stack -> data [Stack -> Count] = value;
+        Stack -> data [++Stack -> Count] = value;
         AsserStack(Stack, __FUNCTION__);
         if(Stack -> Count == Stack -> data[0])
             printf("WARNING! Stack is FULL!\n");
@@ -51,16 +50,21 @@ int stack_push(struct stack_t* Stack, int value)
     }
 int stack_pop(struct stack_t* Stack)
     {
+        char YesNo[1];
         AsserStack(Stack, __FUNCTION__);
-        int buf = 0;
-        buf = Stack -> data [Stack -> Count];
-        Stack -> Count--;
-        AsserStack(Stack, __FUNCTION__);
-        return buf;
+        if(Stack -> Count == 0)
+        {
+            printf("Error! Stack is empty!\n");
+                Stack -> Count--;
+                AsserStack(Stack, __FUNCTION__);
+        }
+        return Stack -> data [Stack -> Count--];
     }
     void stack_dump(const struct stack_t* Stack)
     {
         int i = 0;
+        printf("\n\n");
+        printf("-------------------------------------------------\n");
         printf("Information about stack:\n");
         printf("Stack OK: ");
         if(StackOK(Stack))
@@ -87,6 +91,8 @@ int stack_pop(struct stack_t* Stack)
             printf("Invalid adress!\n");
         if(Stack -> Count == 0)
             printf("Stack is EMPTY\n");
+        printf("-------------------------------------------------\n");
+        printf("\n\n");
 
     }
     void AsserStack(const struct stack_t* Stack, char* name_function)
