@@ -37,6 +37,9 @@ int StackOK(const struct stack_t* stk)
         printf("Max: %d\n", Stack -> data[0]);
         printf("Adress: %d\n", Stack);
         printf("Elements: \n");
+        if(Stack -> Count < 0)
+            printf("\t [0] No\n");
+        if(Stack -> Count >= Stack -> data[0])
         for(i = 1;i <= Stack -> data[0]; i++)
         {
             printf("\t [%d] = %d", i, Stack -> data[i]);
@@ -45,9 +48,7 @@ int StackOK(const struct stack_t* stk)
             else
                 printf("\n");
         }
-        if(Stack -> Count < 0)
-            printf("\t [0] No\n");
-        if(Stack -> Count >= Stack -> data[0])
+        if(Stack -> Count == Stack -> data[0])
             printf("Stack is FULL!\n");
         if(Stack -> Count < 0)
             printf("Invalid adress!\n");
@@ -68,7 +69,7 @@ struct stack_t* stack_construct(int stack_size)
         return Stack;
     }
 
-int destruct_stack(struct stack_t* Stack)
+int stack_destruct(struct stack_t* Stack)
     {
         int i = 0;
         for(i = 0; i <= Stack -> Count; i++)
@@ -85,8 +86,6 @@ int stack_push(struct stack_t* Stack, int value)
         AsserStack(Stack, (char*)__FUNCTION__);
         Stack -> data [++Stack -> Count] = value;
         AsserStack(Stack, (char*)__FUNCTION__);
-        if(Stack -> Count == Stack -> data[0])
-            printf("WARNING! Stack is FULL!\n");
     }
     int stack_top(struct stack_t* Stack)
     {
@@ -103,3 +102,5 @@ int stack_pop(struct stack_t* Stack)
         }
         return Stack -> data [Stack -> Count--];
     }
+
+
