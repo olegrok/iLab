@@ -1,3 +1,5 @@
+#ifndef _GUARD
+#define _GUARD
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -137,3 +139,4 @@ void disassembler()
     fclose(sourseimage);
     fclose(product);
 }
+#endif
