@@ -1,12 +1,16 @@
+#ifndef _GUARD
+#define _GUARD
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+
 struct stack_t
     {
         int* data;
         int Count;
         int Max;
     };
+    typedef struct stack_t* mystack;
 int StackOK(const struct stack_t* stk)
     {
         if(stk && stk -> data && stk -> Count >= 0 && stk -> Count <= stk -> Max && stk -> Max > 0)
@@ -36,7 +40,7 @@ int StackOK(const struct stack_t* stk)
             printf("false\n");
         printf("Count: %d\n", Stack -> Count);
         printf("Max: %d\n", Stack -> Max);
-        printf("Adress: %d\n", Stack);
+        printf("Adress: %d\n", *Stack);
         printf("Elements: \n");
         if(Stack -> Count < 0 || Stack -> Max < 0)
             printf("\t [0] No\n");
@@ -92,6 +96,18 @@ int stack_push(struct stack_t* Stack, int value)
     }
     int stack_top(struct stack_t* Stack)
     {
+        if(Stack -> Count == 0)
+            {
+                printf("Stack is empty!\n");
+                printf("Returned 0\n");
+                return 0;
+            }
+        if(Stack -> Count < 0)
+            {
+                printf("Invalid stack\n");
+                printf("Returned 0\n");
+                return 0;
+            }
         return Stack -> data[Stack -> Count];
     }
 int stack_pop(struct stack_t* Stack)
@@ -105,4 +121,4 @@ int stack_pop(struct stack_t* Stack)
         }
         return Stack -> data [Stack -> Count--];
     }
-
+#endif
