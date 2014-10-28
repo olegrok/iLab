@@ -48,7 +48,7 @@ int StackOK(const struct stack_t* stk)
         for(i = 0;i < Stack -> Max; i++)
         {
             printf("\t [%d] = %d", i, Stack -> data[i]);
-            if(i <= Stack -> Count)
+            if(i < Stack -> Count)
                 printf("*\n");
             else
                 printf("\n");
