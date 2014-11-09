@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+const int OK = 1;
+const int Error = 0;
+const double Error_for_int_function = 0.5;
 
 struct stack_t
     {
@@ -14,11 +17,11 @@ struct stack_t
 int StackOK(const struct stack_t* stk)
     {
         if(stk && stk -> data && stk -> Count >= 0 && stk -> Count <= stk -> Max && stk -> Max > 0)
-            return 1;
+            return OK;
         else
-            return 0;
+            return Error;
     }
-   void AsserStack(const struct stack_t* Stack, char name_function[])
+   void AssertStack(const struct stack_t* Stack, char name_function[])
     {
         if(!StackOK(Stack))
             {
@@ -40,7 +43,7 @@ int StackOK(const struct stack_t* stk)
             printf("false\n");
         printf("Count: %d\n", Stack -> Count);
         printf("Max: %d\n", Stack -> Max);
-        printf("Adress: %d\n", *Stack);
+        printf("Adress: %d\n", Stack);
         printf("Elements: \n");
         if(Stack -> Count < 0 || Stack -> Max < 0)
             printf("\t [0] No\n");
@@ -48,20 +51,22 @@ int StackOK(const struct stack_t* stk)
         for(i = 0;i < Stack -> Max; i++)
         {
             printf("\t [%d] = %d", i, Stack -> data[i]);
+
             if(i < Stack -> Count)
                 printf("*\n");
             else
                 printf("\n");
+
         }
-        if(Stack -> Count == Stack -> Max)
+        if(Stack -> Count == Stack -> Max && Stack -> Max > 0 && Stack -> Count >= 0)
             printf("Stack is FULL!\n");
-        if(Stack -> Count < 0)
-            printf("Invalid adress!\n");
+        if(Stack && Stack -> data && Stack -> Count < 0)
+            printf("Invalid adress!\n"); //указатель на голову
         if(Stack -> Count == 0)
             printf("Stack is EMPTY\n");
         printf("-------------------------------------------------\n");
         printf("\n\n");
-        return 1;
+        return OK;
     }
 
 struct stack_t* stack_construct(int stack_size)
@@ -70,7 +75,7 @@ struct stack_t* stack_construct(int stack_size)
         Stack -> data = (int*)calloc(stack_size + 1, sizeof(int));
         Stack -> Max = stack_size;
         Stack -> Count = 0;
-        AsserStack(Stack, (char*)__FUNCTION__);
+        AssertStack(Stack, (char*)__FUNCTION__);
         return Stack;
     }
 
@@ -85,40 +90,57 @@ int stack_destruct(struct stack_t* Stack)
         Stack -> Max = -1;
         free(Stack -> data);
         free(Stack);
-        Stack = 0;
-        return 0;
+        Stack = NULL;
+        return OK;
     }
 int stack_push(struct stack_t* Stack, int value)
     {
-        AsserStack(Stack, (char*)__FUNCTION__);
-        Stack -> data [Stack -> Count++] = value;
-        AsserStack(Stack, (char*)__FUNCTION__);
+        AssertStack(Stack, (char*)__FUNCTION__);
+        if(Stack -> Count == Stack -> Max)
+            {
+                printf("Stack is FULL!\n");
+                return Error;
+            }
+
+        Stack -> data [Stack -> Count] = value;
+        Stack -> Count++;
+        AssertStack(Stack, (char*)__FUNCTION__);
+        return OK;
     }
-    int stack_top(struct stack_t* Stack)
+    int stack_top(struct stack_t* Stack) //assert
     {
-        if(Stack -> Count == 0)
+        AssertStack(Stack,(char*)__FUNCTION__);
+        int buf = 0;
+        if(Stack -> Count - 1 == 0)
             {
                 printf("Stack is empty!\n");
-                printf("Returned 0\n");
-                return 0;
+                printf("Returned 0.5\n");
+                return Error_for_int_function;
             }
-        if(Stack -> Count < 0)
+        if(Stack -> Count - 1 < 0)
             {
                 printf("Invalid stack\n");
-                printf("Returned 0\n");
-                return 0;
+                printf("Returned 0.5\n");
+                return Error_for_int_function;
             }
-        return Stack -> data[Stack -> Count];
+        Stack -> Count--;
+        buf = Stack -> data[Stack -> Count];
+        Stack -> Count++;
+        return buf;
     }
-int stack_pop(struct stack_t* Stack)
+int stack_pop(struct stack_t* Stack) //Затереть последний элемент
     {
-        AsserStack(Stack, (char*)__FUNCTION__);
+        AssertStack(Stack, (char*)__FUNCTION__);
+        int buf = 0;
         if(Stack -> Count == 0)
-        {
-            printf("Error! Stack is empty!\n");
-                Stack -> Count--;
-                AsserStack(Stack, (char*)__FUNCTION__);
-        }
-        return Stack -> data [Stack -> Count--];
+            {
+                printf("Error! Stack is empty!\n");
+                    return Error_for_int_function;
+            }
+        Stack -> Count--;
+        buf = Stack -> data [Stack -> Count];
+        Stack -> data [Stack -> Count] = 0;
+        AssertStack(Stack, (char*)__FUNCTION__);
+        return buf;
     }
 #endif
