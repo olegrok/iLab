@@ -14,6 +14,7 @@ struct stack_t
         int Max;
     };
     typedef struct stack_t* mystack;
+
 int StackOK(const struct stack_t* stk)
     {
         if(stk && stk -> data && stk -> Count >= 0 && stk -> Count <= stk -> Max && stk -> Max > 0)
@@ -21,6 +22,7 @@ int StackOK(const struct stack_t* stk)
         else
             return Error;
     }
+
    void AssertStack(const struct stack_t* Stack, char name_function[])
     {
         if(!StackOK(Stack))
@@ -30,6 +32,7 @@ int StackOK(const struct stack_t* stk)
             }
         assert(StackOK(Stack));
     }
+
     int stack_dump(const struct stack_t* Stack)
     {
         int i = 0;
@@ -98,8 +101,9 @@ int stack_push(struct stack_t* Stack, int value)
         AssertStack(Stack, (char*)__FUNCTION__);
         if(Stack -> Count == Stack -> Max)
             {
-                printf("Stack is FULL!\n");
-                return Error;
+                Stack -> Max++;
+                Stack = (struct stack_t*)realloc(Stack, Stack -> Max + 1);
+                AssertStack(Stack, (char*)__FUNCTION__);
             }
 
         Stack -> data [Stack -> Count] = value;
