@@ -1,36 +1,96 @@
-#ifndef _GUARD
-#define _GUARD
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
 
-const int nEnd = 0;
-const int nPush = 1;
-const int nPop = 2;
-const int nAdd = 3;
-const int nJump = 4;
-const int nMul = 5;
-const int nSub = 6;
-const int nDiv = 7;
+typedef const int cint;
+typedef const char cchar;
 
-const char End[4] = "end";
-const char Push[5] = "push";
-const char Pop[4] = "pop";
-const char Add[4] = "add";
-const char Jump[5] = "jump";
-const char Mul[4] = "mul";
-const char Sub[4] = "sub";
-const char Div[4] = "div";
+cint nEnd =     0;
+cint nPush =    1;
+cint nPop =     2;
+cint nAdd =     3;
+cint nJump =    4;
+cint nMul =     5;
+cint nSub =     6;
+cint nDiv =     7;
+cint nPushAx =  8;
+cint nPushBx =  9;
+cint nPushCx =  10;
+cint nPushDx =  11;
+cint nCall =    12;
+cint nRet =     13;
+cint nJnz =     14;
+cint nJz =      15;
+cint nCmp =     16;
+cint nJe =      17;
+cint nJg =      18;
+cint nJl =      19;
+cint nJng =     20;
+cint nJnl =     21;
+cint nSqr =     22;
+cint nSqrt =    23;
+
+
+cchar Point =       ':';
+cchar End[4] =      "end";
+cchar Push[5] =     "push";
+cchar Pop[4] =      "pop";
+cchar Add[4] =      "add";
+cchar Jump[5] =     "jump";
+cchar Mul[4] =      "mul";
+cchar Sub[4] =      "sub";
+cchar Div[4] =      "div";
+cchar PushAx[8] =   "push_ax";
+cchar PushBx[8] =   "push_bx";
+cchar PushCx[8] =   "push_cx";
+cchar PushDx[8] =   "push_dx";
+cchar Call[5] =     "call";
+cchar Ret[4] =      "ret";
+cchar Jnz[4] =      "jnz";
+cchar Jz[3] =       "jz";
+cchar Cmp[4] =      "cmp";
+cchar Je[3] =       "je";
+cchar Jg[3] =       "jg";
+cchar Jl[3] =       "jl";
+cchar Jng[4] =      "jng";
+cchar Jnl[4] =      "jnl";
+cchar Sqr[4] =      "sqr";
+cchar Sqrt[5] =     "sqrt";
 
 
 int assembler()
 {
     FILE *sourse;
     FILE *product;
-    char command[15], valuestr[15];
+    char command[15], valuestr[50], buf[50];
+    int points_int[100], i = 0, j = 0, k = 0;
+    char points_char[100][100];
     sourse = fopen("Source.txt","r");
     product = fopen("Product.txt","w+");
+
+
+    i = 0;
+
+    while(!feof(sourse))
+    {
+        fscanf(sourse, "%s", command);
+        printf("[%d] %s\n", i, command);
+        if(command[strlen(command) - 1] == Point)
+            {
+                strncpy(points_char[j], command, strlen(command) - 1);
+                points_int[j] = i + 1;
+                printf("j: %d   i: %d  com: %s  \n", j, points_int[j], points_char[j]);
+                j++;
+
+            }
+        i++;
+    }
+
+
+    rewind(sourse);
+
+
     while(!feof(sourse))
     {
         fscanf(sourse, "%s", command);
@@ -40,7 +100,7 @@ int assembler()
                 fprintf(product, "%d\n", nEnd);
                 fclose(sourse);
                 fclose(product);
-                return 1;
+                return 0;
             }
 
         if(strcmp(command, Push) == 0)
@@ -56,40 +116,252 @@ int assembler()
             fprintf(product, "%d\n", nPop);
             continue;
         }
+
         if(strcmp(command, Add) == 0)
         {
             fprintf(product, "%d\n", nAdd);
             continue;
         }
+
         if(strcmp(command, Jump) == 0)
         {
             fprintf(product, "%d ", nJump);
             fscanf(sourse, "%s", valuestr);
-            fprintf(product, "%s\n",valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
             continue;
         }
+
         if(strcmp(command, Mul) == 0)
           {
             fprintf(product, "%d\n", nMul);
             continue;
           }
+
         if(strcmp(command, Sub) == 0)
          {
             fprintf(product, "%d\n", nSub);
             continue;
          }
+
         if(strcmp(command, Div) == 0)
         {
             fprintf(product, "%d\n", nDiv);
             continue;
         }
+
+        if(!strcmp(command, PushAx))
+        {
+            fprintf(product, "%d\n", nPushAx);
+            continue;
+        }
+
+        if(!strcmp(command, PushBx))
+        {
+            fprintf(product, "%d\n", nPushBx);
+            continue;
+        }
+
+        if(!strcmp(command, PushCx))
+        {
+            fprintf(product, "%d\n", nPushCx);
+            continue;
+        }
+
+        if(!strcmp(command, PushDx))
+        {
+            fprintf(product, "%d\n", nPushDx);
+            continue;
+        }
+
+        if(!strcmp(command, Call))
+        {
+            fprintf(product, "%d ", nCall);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Ret))
+        {
+            fprintf(product, "%d\n", nRet);
+            continue;
+        }
+
+        if(!strcmp(command, Jnz))
+        {
+            fprintf(product, "%d ", nJnz);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jz))
+        {
+            fprintf(product, "%d ", nJz);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Call))
+        {
+            fprintf(product, "%d ", nCall);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Cmp))
+        {
+            fprintf(product, "%d\n", nCmp);
+            continue;
+        }
+
+        if(!strcmp(command, Je))
+        {
+            fprintf(product, "%d ", nJe);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jg))
+        {
+            fprintf(product, "%d ", nJg);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jl))
+        {
+            fprintf(product, "%d ", nJl);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jnl))
+        {
+            fprintf(product, "%d ", nJnl);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jng))
+        {
+            fprintf(product, "%d ", nJng);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Sqr))
+        {
+            fprintf(product, "%d\n", nSqr);
+            continue;
+        }
+
+        if(!strcmp(command, Sqrt))
+        {
+            fprintf(product, "%d\n", nSqrt);
+            continue;
+        }
+
+
+
+    //to be continued
+
+
+
     }
 
     fprintf(product, "%s", "\0");
     fclose(sourse);
     fclose(product);
 }
-void disassembler()
+int disassembler()
 {
     FILE *sourseimage;
     FILE *product;
@@ -139,4 +411,3 @@ void disassembler()
     fclose(sourseimage);
     fclose(product);
 }
-#endif
