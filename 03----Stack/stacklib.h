@@ -61,7 +61,7 @@ int StackOK(const struct stack_t* stk)
         if(Stack -> Count == Stack -> Max && Stack -> Max > 0 && Stack -> Count >= 0)
             printf("Stack is FULL!\n");
         if(Stack && Stack -> data && Stack -> Count < 0)
-            printf("Invalid adress!\n"); //указатель на голову
+            printf("Invalid adress!\n");
         if(Stack -> Count == 0)
             printf("Stack is EMPTY\n");
         printf("-------------------------------------------------\n");
@@ -107,17 +107,17 @@ int stack_push(struct stack_t* Stack, int value)
         AssertStack(Stack, (char*)__FUNCTION__);
         return OK;
     }
-    int stack_top(struct stack_t* Stack) //assert
+    int stack_top(struct stack_t* Stack)
     {
         AssertStack(Stack,(char*)__FUNCTION__);
         int buf = 0;
-        if(Stack -> Count - 1 == 0)
+        if(Stack -> Count == 0)
             {
                 printf("Stack is empty!\n");
                 printf("Returned 0.5\n");
                 return Error_for_int_function;
             }
-        if(Stack -> Count - 1 < 0)
+        if(Stack -> Count < 0)
             {
                 printf("Invalid stack\n");
                 printf("Returned 0.5\n");
@@ -128,7 +128,7 @@ int stack_push(struct stack_t* Stack, int value)
         Stack -> Count++;
         return buf;
     }
-int stack_pop(struct stack_t* Stack) //Затереть последний элемент
+int stack_pop(struct stack_t* Stack)
     {
         AssertStack(Stack, (char*)__FUNCTION__);
         int buf = 0;
