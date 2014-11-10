@@ -79,7 +79,7 @@ int assembler()
         if(command[strlen(command) - 1] == Point)
             {
                 strncpy(points_char[j], command, strlen(command) - 1);
-                points_int[j] = i + 1;
+                points_int[j] = i - j;
                 printf("j: %d   i: %d  com: %s  \n", j, points_int[j], points_char[j]);
                 j++;
 
@@ -351,7 +351,16 @@ int assembler()
 
 
 
-    //to be continued
+
+
+
+
+
+
+
+
+
+
 
 
 
