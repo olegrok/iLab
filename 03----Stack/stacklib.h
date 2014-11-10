@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+typedef int mystack_type;
 const int OK = 1;
 const int Error = 0;
 const double Error_for_int_function = 0.5;
@@ -46,7 +47,7 @@ int StackOK(const struct stack_t* stk)
             printf("false\n");
         printf("Count: %d\n", Stack -> Count);
         printf("Max: %d\n", Stack -> Max);
-        printf("Adress: %d\n", Stack);
+        printf("Adress: %p\n", Stack);
         printf("Elements: \n");
         if(Stack -> Count < 0 || Stack -> Max < 0)
             printf("\t [0] No\n");
@@ -102,7 +103,7 @@ int stack_push(struct stack_t* Stack, int value)
         if(Stack -> Count == Stack -> Max)
             {
                 Stack -> Max++;
-                Stack = (struct stack_t*)realloc(Stack, Stack -> Max + 1);
+                Stack -> data = (mystack_type*)realloc(Stack -> data, Stack -> Max + 1);
                 AssertStack(Stack, (char*)__FUNCTION__);
             }
 
