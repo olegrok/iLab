@@ -1,151 +1,422 @@
-#ifndef _GUARD
-#define _GUARD
-#include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
-typedef int mystack_type;
-const int OK = 1;
-const int Error = 0;
-const double Error_for_int_function = 0.5;
+#include <stdlib.h>
+#include <string.h>
+#include <locale.h>
 
-struct stack_t
-    {
-        int* data;
-        int Count;
-        int Max;
-    };
-    typedef struct stack_t* mystack;
+typedef const int cint;
+typedef const char cchar;
 
-int StackOK(const struct stack_t* stk)
-    {
-        if(stk && stk -> data && stk -> Count >= 0 && stk -> Count <= stk -> Max && stk -> Max > 0)
-            return OK;
-        else
-            return Error;
-    }
+cint nEnd =     0;
+cint nPush =    1;
+cint nPop =     2;
+cint nAdd =     3;
+cint nJump =    4;
+cint nMul =     5;
+cint nSub =     6;
+cint nDiv =     7;
+cint nPushAx =  8;
+cint nPushBx =  9;
+cint nPushCx =  10;
+cint nPushDx =  11;
+cint nCall =    12;
+cint nRet =     13;
+cint nJnz =     14;
+cint nJz =      15;
+cint nCmp =     16;
+cint nJe =      17;
+cint nJg =      18;
+cint nJl =      19;
+cint nJng =     20;
+cint nJnl =     21;
+cint nSqr =     22;
+cint nSqrt =    23;
 
-   void AssertStack(const struct stack_t* Stack, char name_function[])
+
+cchar Point =       ':';
+cchar End[4] =      "end";
+cchar Push[5] =     "push";
+cchar Pop[4] =      "pop";
+cchar Add[4] =      "add";
+cchar Jump[5] =     "jump";
+cchar Mul[4] =      "mul";
+cchar Sub[4] =      "sub";
+cchar Div[4] =      "div";
+cchar PushAx[8] =   "push_ax";
+cchar PushBx[8] =   "push_bx";
+cchar PushCx[8] =   "push_cx";
+cchar PushDx[8] =   "push_dx";
+cchar Call[5] =     "call";
+cchar Ret[4] =      "ret";
+cchar Jnz[4] =      "jnz";
+cchar Jz[3] =       "jz";
+cchar Cmp[4] =      "cmp";
+cchar Je[3] =       "je";
+cchar Jg[3] =       "jg";
+cchar Jl[3] =       "jl";
+cchar Jng[4] =      "jng";
+cchar Jnl[4] =      "jnl";
+cchar Sqr[4] =      "sqr";
+cchar Sqrt[5] =     "sqrt";
+
+
+int assembler()
+{
+    FILE *sourse;
+    FILE *product;
+    char command[15], valuestr[50], buf[50];
+    int points_int[100], i = 0, j = 0, k = 0;
+    char points_char[100][100];
+    sourse = fopen("Source.txt","r");
+    product = fopen("Product.txt","w+");
+
+
+    i = 0;
+
+    while(!feof(sourse))
     {
-        if(!StackOK(Stack))
+        fscanf(sourse, "%s", command);
+        printf("[%d] %s\n", i, command);
+        if(command[strlen(command) - 1] == Point)
             {
-                stack_dump(Stack);
-                printf("Function: %s\n", name_function);
+                strncpy(points_char[j], command, strlen(command) - 1);
+                points_int[j] = i - j;
+                printf("j: %d   i: %d  com: %s  \n", j, points_int[j], points_char[j]);
+                j++;
+
             }
-        assert(StackOK(Stack));
+        i++;
     }
 
-    int stack_dump(const struct stack_t* Stack)
+
+    rewind(sourse);
+
+
+    while(!feof(sourse))
     {
-        int i = 0;
-        printf("\n\n");
-        printf("-------------------------------------------------\n");
-        printf("Information about stack:\n");
-        printf("Stack OK: ");
-        if(StackOK(Stack))
-             printf("true\n");
-        else
-            printf("false\n");
-        printf("Count: %d\n", Stack -> Count);
-        printf("Max: %d\n", Stack -> Max);
-        printf("Adress: %p\n", Stack);
-        printf("Elements: \n");
-        if(Stack -> Count < 0 || Stack -> Max < 0)
-            printf("\t [0] No\n");
-        if(Stack -> Count <= Stack -> Max)
-        for(i = 0;i < Stack -> Max; i++)
+        fscanf(sourse, "%s", command);
+
+        if(strcmp(command, End) == 0)
+            {
+                fprintf(product, "%d\n", nEnd);
+                fclose(sourse);
+                fclose(product);
+                return 0;
+            }
+
+        if(strcmp(command, Push) == 0)
         {
-            printf("\t [%d] = %d", i, Stack -> data[i]);
-
-            if(i < Stack -> Count)
-                printf("*\n");
-            else
-                printf("\n");
-
+            fprintf(product, "%d ", nPush);
+            fscanf(sourse, "%s", valuestr);
+            fprintf(product, "%s\n",valuestr);
+            continue;
         }
-        if(Stack -> Count == Stack -> Max && Stack -> Max > 0 && Stack -> Count >= 0)
-            printf("Stack is FULL!\n");
-        if(Stack && Stack -> data && Stack -> Count < 0)
-            printf("Invalid adress!\n");
-        if(Stack -> Count == 0)
-            printf("Stack is EMPTY\n");
-        printf("-------------------------------------------------\n");
-        printf("\n\n");
-        return OK;
+
+        if(strcmp(command, Pop) == 0)
+        {
+            fprintf(product, "%d\n", nPop);
+            continue;
+        }
+
+        if(strcmp(command, Add) == 0)
+        {
+            fprintf(product, "%d\n", nAdd);
+            continue;
+        }
+
+        if(strcmp(command, Jump) == 0)
+        {
+            fprintf(product, "%d ", nJump);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(strcmp(command, Mul) == 0)
+          {
+            fprintf(product, "%d\n", nMul);
+            continue;
+          }
+
+        if(strcmp(command, Sub) == 0)
+         {
+            fprintf(product, "%d\n", nSub);
+            continue;
+         }
+
+        if(strcmp(command, Div) == 0)
+        {
+            fprintf(product, "%d\n", nDiv);
+            continue;
+        }
+
+        if(!strcmp(command, PushAx))
+        {
+            fprintf(product, "%d\n", nPushAx);
+            continue;
+        }
+
+        if(!strcmp(command, PushBx))
+        {
+            fprintf(product, "%d\n", nPushBx);
+            continue;
+        }
+
+        if(!strcmp(command, PushCx))
+        {
+            fprintf(product, "%d\n", nPushCx);
+            continue;
+        }
+
+        if(!strcmp(command, PushDx))
+        {
+            fprintf(product, "%d\n", nPushDx);
+            continue;
+        }
+
+        if(!strcmp(command, Call))
+        {
+            fprintf(product, "%d ", nCall);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Ret))
+        {
+            fprintf(product, "%d\n", nRet);
+            continue;
+        }
+
+        if(!strcmp(command, Jnz))
+        {
+            fprintf(product, "%d ", nJnz);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jz))
+        {
+            fprintf(product, "%d ", nJz);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Call))
+        {
+            fprintf(product, "%d ", nCall);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Cmp))
+        {
+            fprintf(product, "%d\n", nCmp);
+            continue;
+        }
+
+        if(!strcmp(command, Je))
+        {
+            fprintf(product, "%d ", nJe);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jg))
+        {
+            fprintf(product, "%d ", nJg);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jl))
+        {
+            fprintf(product, "%d ", nJl);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jnl))
+        {
+            fprintf(product, "%d ", nJnl);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Jng))
+        {
+            fprintf(product, "%d ", nJng);
+            fscanf(sourse, "%s", valuestr);
+            strcpy(buf, valuestr + 1);
+            for(k = 0; k < j; k++)
+                if(strcmp(buf, points_char[k]) == 0)
+                    {
+                        fprintf(product, "%d\n", points_int[k]);
+                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
+                        break;
+                    }
+
+            continue;
+        }
+
+        if(!strcmp(command, Sqr))
+        {
+            fprintf(product, "%d\n", nSqr);
+            continue;
+        }
+
+        if(!strcmp(command, Sqrt))
+        {
+            fprintf(product, "%d\n", nSqrt);
+            continue;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
-struct stack_t* stack_construct(int stack_size)
+    fprintf(product, "%s", "\0");
+    fclose(sourse);
+    fclose(product);
+}
+int disassembler()
+{
+    FILE *sourseimage;
+    FILE *product;
+    int command;
+    char valuestr[15];
+    product = fopen("Product.txt","r");
+    sourseimage = fopen("Sourseimage.txt","w+");
+    while(!feof(product))
     {
-        struct stack_t *Stack = (struct stack_t*)calloc(1, sizeof(struct stack_t));
-        Stack -> data = (int*)calloc(stack_size + 1, sizeof(int));
-        Stack -> Max = stack_size;
-        Stack -> Count = 0;
-        AssertStack(Stack, (char*)__FUNCTION__);
-        return Stack;
+        fscanf(product, "%d", &command);
+        switch (command)
+        {
+            case 0:
+                fprintf(sourseimage, "%s\n", End);
+                fclose(sourseimage);
+                fclose(product);
+                return 0;
+                break;
+            case 1:
+                fprintf(sourseimage, "%s ", Push);
+                fscanf(product, "%s", valuestr);
+                fprintf(sourseimage, "%s\n", valuestr);
+                break;
+            case 2:
+                fprintf(sourseimage, "%s\n", Pop);
+                break;
+            case 3:
+                fprintf(sourseimage, "%s\n", Add);
+                break;
+            case 4:
+                fprintf(sourseimage, "%s ", Jump);
+                fscanf(product, "%s", valuestr);
+                fprintf(sourseimage, "%s\n", valuestr);
+                break;
+            case 5:
+                fprintf(sourseimage, "%s\n", Mul);
+                break;
+            case 6:
+                fprintf(sourseimage, "%s\n", Sub);
+                break;
+            case 7:
+                fprintf(sourseimage, "%s\n", Div);
+                break;
+        }
     }
 
-int stack_destruct(struct stack_t* Stack)
-    {
-        int i = 0;
-        for(i = 0; i < Stack -> Count; i++)
-            {
-               Stack -> data[i] = 0;
-            }
-        Stack -> Count = -1;
-        Stack -> Max = -1;
-        free(Stack -> data);
-        free(Stack);
-        Stack = NULL;
-        return OK;
-    }
-int stack_push(struct stack_t* Stack, int value)
-    {
-        AssertStack(Stack, (char*)__FUNCTION__);
-        if(Stack -> Count == Stack -> Max)
-            {
-                Stack -> Max++;
-                Stack -> data = (mystack_type*)realloc(Stack -> data, Stack -> Max + 1);
-                AssertStack(Stack, (char*)__FUNCTION__);
-            }
-
-        Stack -> data [Stack -> Count] = value;
-        Stack -> Count++;
-        AssertStack(Stack, (char*)__FUNCTION__);
-        return OK;
-    }
-    int stack_top(struct stack_t* Stack)
-    {
-        AssertStack(Stack,(char*)__FUNCTION__);
-        int buf = 0;
-        if(Stack -> Count == 0)
-            {
-                printf("Stack is empty!\n");
-                printf("Returned 0.5\n");
-                return Error_for_int_function;
-            }
-        if(Stack -> Count < 0)
-            {
-                printf("Invalid stack\n");
-                printf("Returned 0.5\n");
-                return Error_for_int_function;
-            }
-        Stack -> Count--;
-        buf = Stack -> data[Stack -> Count];
-        Stack -> Count++;
-        return buf;
-    }
-int stack_pop(struct stack_t* Stack)
-    {
-        AssertStack(Stack, (char*)__FUNCTION__);
-        int buf = 0;
-        if(Stack -> Count == 0)
-            {
-                printf("Error! Stack is empty!\n");
-                    return Error_for_int_function;
-            }
-        Stack -> Count--;
-        buf = Stack -> data [Stack -> Count];
-        Stack -> data [Stack -> Count] = 0;
-        AssertStack(Stack, (char*)__FUNCTION__);
-        return buf;
-    }
-#endif
+    fclose(sourseimage);
+    fclose(product);
+}
