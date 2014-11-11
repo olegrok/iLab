@@ -37,7 +37,7 @@ int StackOK(const struct stack_t* stk)
     int stack_dump(const struct stack_t* Stack)
     {
         int i = 0;
-        printf("\n\n");
+        printf("\n");
         printf("-------------------------------------------------\n");
         printf("Information about stack:\n");
         printf("Stack OK: ");
@@ -148,4 +148,14 @@ int stack_pop(struct stack_t* Stack)
         AssertStack(Stack, (char*)__FUNCTION__);
         return buf;
     }
+int stack_check(struct stack_t* Stack)
+{
+    if(StackOK(!Stack))
+        return -13;
+    if(Stack -> Count == 0)
+        return 0;
+    if(Stack -> Count == Stack -> Max)
+        return -1;
+    return Stack -> Count;
+}
 #endif
