@@ -11,4 +11,7 @@ int stack_pop(struct stack_t* Stack);
 int assembler();
 int disassembler();
 int stack_dump(const struct stack_t* Stack);
+int stack_check(struct stack_t* Stack);
+
+
 
