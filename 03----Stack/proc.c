@@ -21,10 +21,11 @@ int proc_dump(mystack stk)
 
 int main()
 {
-    int sizestr = 5, size = 0, comdat = 0, j = 0, buf1 = 0, buf2 = 0, buf3 = 0, i = 0;
+    int sizestr = 1, size = 0, comdat = 0, j = 0, i = 0;
+    mystack_type buf1 = 0, buf2 = 0, buf3 = 0;
 
 
-    int* strcomand = (int*)calloc(sizestr,sizeof(int));
+    int* strcommand = (int*)calloc(j + 1,sizeof(int));
     FILE *product;
     assembler();
     product = fopen("Product.txt","r");
@@ -32,17 +33,9 @@ int main()
 
     while(!feof(product))                   //Считывание команд
     {
-
-        size+=2;
-        if(size >= sizestr)
-            {
-                sizestr *= 2;
-                strcomand = (int*)realloc(strcomand, sizeof(int)*sizestr);
-            }
-        fscanf(product, "%d", &comdat);
-        strcomand[j] = comdat;
+        fscanf(product, "%d", &strcommand[j]);
         j++;
-
+        strcommand = (int*)realloc(strcommand, sizeof(int)*(j + 1));
     }
 
     fclose(product);
@@ -51,19 +44,19 @@ int main()
     mystack call_ret = stack_construct(1);  //Стек вызова
 
 
-    for(i = 0; strcomand[i] != 0; i++)
+    for(i = 0; strcommand[i]; i++)
     {
-        printf("[%d] %d\n",i, strcomand[i]);
-        if(strcomand[i] < 0)
+        printf("[%d] %d\n",i, strcommand[i]);
+        if(strcommand[i] < 0)
             continue;
-        switch (strcomand[i])
+        switch (strcommand[i])
         {
 
             case 0: return 0;break;             //End
 
             case 1:                             //Push
                 i++;
-                stack_push(stk, strcomand[i]);
+                stack_push(stk, strcommand[i]);
                 break;
 
             case 2:                             //Pop
@@ -76,7 +69,7 @@ int main()
 
             case 4:                             //Jump
                     i++;
-                    i = strcomand[i] - 1;
+                    i = strcommand[i] - 1;
                 break;
 
             case 5:                             //Mul
@@ -111,7 +104,7 @@ int main()
             case 12:                            //Call
                 i++;
                 stack_push(call_ret, i);
-                i = strcomand[i] - 1;
+                i = strcommand[i] - 1;
                 break;
             case 13:                            //Ret
                 if(stack_check(stk) != 0)
@@ -120,12 +113,12 @@ int main()
             case 14:                            //Jnz
                 i++;
                 if(stack_top(stk) != 0)
-                    i = strcomand[i] - 1;
+                    i = strcommand[i] - 1;
                 break;
             case 15:                            //Jz
                 i++;
                 if(stack_top(stk) == 0)
-                    i = strcomand[i] - 1;
+                    i = strcommand[i] - 1;
                 break;
 
             case 16:                            //Cmp if (last > penultimate) := 1 if (last < penultimate) :=  0
@@ -151,8 +144,8 @@ int main()
                     buf3 = -1;
                 stack_push(stk, buf2);
                 stack_push(stk, buf1);
-                if(buf3 == 0)
-                    i = strcomand[i] - 1;
+                if(!buf3)
+                    i = strcommand[i] - 1;
                 buf3 = 0;
                 break;
 
@@ -166,8 +159,8 @@ int main()
                     buf3 = -1;
                 stack_push(stk, buf2);
                 stack_push(stk, buf1);
-                if(buf3 == 0)
-                    i = strcomand[i] - 1;
+                if(!buf3)
+                    i = strcommand[i] - 1;
                 buf3 = 0;
                 break;
 
@@ -181,8 +174,8 @@ int main()
                     buf3 = -1;
                 stack_push(stk, buf2);
                 stack_push(stk, buf1);
-                if(buf3 == 0)
-                    i = strcomand[i] - 1;
+                if(!buf3)
+                    i = strcommand[i] - 1;
                 buf3 = 0;
                 break;
 
@@ -196,8 +189,8 @@ int main()
                     buf3 = -1;
                 stack_push(stk, buf2);
                 stack_push(stk, buf1);
-                if(buf3 == 0)
-                    i = strcomand[i] - 1;
+                if(!buf3)
+                    i = strcommand[i] - 1;
                 buf3 = 0;
                 break;
 
@@ -211,8 +204,8 @@ int main()
                     buf3 = -1;
                 stack_push(stk, buf2);
                 stack_push(stk, buf1);
-                if(buf3 == 0)
-                    i = strcomand[i] - 1;
+                if(!buf3)
+                    i = strcommand[i] - 1;
                 buf3 = 0;
                 break;
 
