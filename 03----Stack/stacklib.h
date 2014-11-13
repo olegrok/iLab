@@ -10,7 +10,7 @@ const double Error_for_int_function = 0.5;
 
 struct stack_t
     {
-        int* data;
+        mystack_type* data;
         int Count;
         int Max;
     };
@@ -66,7 +66,7 @@ int StackOK(const struct stack_t* stk)
             printf("Stack is FULL!\n");
         if(Stack && Stack -> data && Stack -> Count < 0)
             printf("Invalid adress!\n");
-        if(Stack -> Count == 0)
+        if(!Stack -> Count)
             printf("Stack is EMPTY\n");
         printf("-------------------------------------------------\n");
         printf("\n\n");
@@ -97,7 +97,7 @@ int stack_destruct(struct stack_t* Stack)
         Stack = NULL;
         return OK;
     }
-int stack_push(struct stack_t* Stack, int value)
+int stack_push(struct stack_t* Stack, mystack_type value)
     {
         AssertStack(Stack, (char*)__FUNCTION__);
         if(Stack -> Count == Stack -> Max)
@@ -112,11 +112,11 @@ int stack_push(struct stack_t* Stack, int value)
         AssertStack(Stack, (char*)__FUNCTION__);
         return OK;
     }
-    int stack_top(struct stack_t* Stack)
+    mystack_type stack_top(struct stack_t* Stack)
     {
         AssertStack(Stack,(char*)__FUNCTION__);
-        int buf = 0;
-        if(Stack -> Count == 0)
+        mystack_type buf = 0;
+        if(!Stack -> Count)
             {
                 printf("Stack is empty!\n");
                 printf("Returned 0.5\n");
@@ -136,8 +136,8 @@ int stack_push(struct stack_t* Stack, int value)
 int stack_pop(struct stack_t* Stack)
     {
         AssertStack(Stack, (char*)__FUNCTION__);
-        int buf = 0;
-        if(Stack -> Count == 0)
+        mystack_type buf = 0;
+        if(!Stack -> Count)
             {
                 printf("Error! Stack is empty!\n");
                     return Error_for_int_function;
@@ -152,7 +152,7 @@ int stack_check(struct stack_t* Stack)
 {
     if(!StackOK(Stack))
         return -13;
-    if(Stack -> Count == 0)
+    if(!Stack -> Count)
         return 0;
     if(Stack -> Count == Stack -> Max)
         return -1;
