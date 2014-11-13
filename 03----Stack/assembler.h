@@ -64,7 +64,8 @@ int assembler()
     FILE *sourse;
     FILE *product;
     char command[15], valuestr[50], buf[50];
-    int points_int[100], i = 0, j = 0, k = 0;
+    int i = 0, j = 0, k = 0;
+    mystack_type points_int[100];
     char points_char[100][100];
     sourse = fopen("Source.txt","r");
     product = fopen("Product.txt","w+");
@@ -106,7 +107,7 @@ int assembler()
             }
 
 
-        if(strcmp(command, End) == 0)
+        if(!strcmp(command, End))
             {
                 fprintf(product, "%d\n", nEnd);
                 fclose(sourse);
@@ -114,7 +115,7 @@ int assembler()
                 return 0;
             }
 
-        if(strcmp(command, Push) == 0)
+        if(!strcmp(command, Push))
         {
             fprintf(product, "%d ", nPush);
             fscanf(sourse, "%s", valuestr);
@@ -122,19 +123,19 @@ int assembler()
             continue;
         }
 
-        if(strcmp(command, Pop) == 0)
+        if(!strcmp(command, Pop))
         {
             fprintf(product, "%d\n", nPop);
             continue;
         }
 
-        if(strcmp(command, Add) == 0)
+        if(!strcmp(command, Add))
         {
             fprintf(product, "%d\n", nAdd);
             continue;
         }
 
-        if(strcmp(command, Jump) == 0)
+        if(!strcmp(command, Jump))
         {
             fprintf(product, "%d ", nJump);
             fscanf(sourse, "%s", valuestr);
@@ -150,19 +151,19 @@ int assembler()
             continue;
         }
 
-        if(strcmp(command, Mul) == 0)
+        if(!strcmp(command, Mul))
           {
             fprintf(product, "%d\n", nMul);
             continue;
           }
 
-        if(strcmp(command, Sub) == 0)
+        if(!strcmp(command, Sub))
          {
             fprintf(product, "%d\n", nSub);
             continue;
          }
 
-        if(strcmp(command, Div) == 0)
+        if(!strcmp(command, Div))
         {
             fprintf(product, "%d\n", nDiv);
             continue;
@@ -359,20 +360,6 @@ int assembler()
             fprintf(product, "%d\n", nSqrt);
             continue;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }
