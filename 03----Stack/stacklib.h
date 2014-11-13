@@ -150,7 +150,7 @@ int stack_pop(struct stack_t* Stack)
     }
 int stack_check(struct stack_t* Stack)
 {
-    if(StackOK(!Stack))
+    if(!StackOK(Stack))
         return -13;
     if(Stack -> Count == 0)
         return 0;
