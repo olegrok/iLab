@@ -2,9 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-
 typedef const int cint;
 typedef const char cchar;
+
+#define __Search_Engine_Pointer__\
+            fscanf(sourse, "%s", valuestr);\
+            strcpy(buf, valuestr + 1);\
+            for(k = 0; k < j; k++)\
+                if(strcmp(buf, points_char[k]) == 0)\
+                    {\
+                        fprintf(product, "%d\n", points_int[k]);\
+                        break;\
+                    }\
+            continue;
+
+
 
 cint nEnd =     0;
 cint nPush =    1;
@@ -138,17 +150,7 @@ int assembler()
         if(!strcmp(command, Jump))
         {
             fprintf(product, "%d ", nJump);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        //printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Mul))
@@ -196,17 +198,7 @@ int assembler()
         if(!strcmp(command, Call))
         {
             fprintf(product, "%d ", nCall);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Ret))
@@ -218,49 +210,19 @@ int assembler()
         if(!strcmp(command, Jnz))
         {
             fprintf(product, "%d ", nJnz);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d \n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Jz))
         {
             fprintf(product, "%d ", nJz);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Call))
         {
             fprintf(product, "%d ", nCall);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Cmp))
@@ -272,81 +234,31 @@ int assembler()
         if(!strcmp(command, Je))
         {
             fprintf(product, "%d ", nJe);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Jg))
         {
             fprintf(product, "%d ", nJg);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Jl))
         {
             fprintf(product, "%d ", nJl);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Jnl))
         {
             fprintf(product, "%d ", nJnl);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Jng))
         {
             fprintf(product, "%d ", nJng);
-            fscanf(sourse, "%s", valuestr);
-            strcpy(buf, valuestr + 1);
-            for(k = 0; k < j; k++)
-                if(strcmp(buf, points_char[k]) == 0)
-                    {
-                        fprintf(product, "%d\n", points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
-                        break;
-                    }
-
-            continue;
+            __Search_Engine_Pointer__;
         }
 
         if(!strcmp(command, Sqr))
