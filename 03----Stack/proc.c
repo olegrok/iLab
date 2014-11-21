@@ -229,5 +229,7 @@ int main()
     proc_dump(stk);
     stack_destruct(stk);
     stack_destruct(call_ret);
+    free(strcommand);
     return 0;
 }
+
