@@ -47,6 +47,7 @@ struct li* new_list_item(key_t key, value_t value) //list's element constructor
 
 void delete_items(struct li* it) //list element destructor
 {
+
    if (it)
     {
       if (it -> next)
@@ -59,12 +60,20 @@ void delete_items(struct li* it) //list element destructor
    }
 }
 
-void delete_list(struct list *l) //list destructor
+void delete_one_list(struct list *l) //list destructor
 {
-   if ( l ) {
-      delete_items( l -> first );
-      free ( l );
-   }
+   if (l)
+    {
+      delete_items(l -> first);
+    }
+}
+
+void delete_hash_table(struct list *l, int count)
+{
+    int i = 0;
+    for(i = 0; i < count; i++)
+        delete_one_list(&l[i]);
+    free(l);
 }
 
 
@@ -75,7 +84,6 @@ int insert_item(struct list *l, key_t key, value_t value ) //add element
    it -> next = l -> first;
    l -> first = it;
    l -> size++;
-   //print_list(l);
    return 1;
 }
 
@@ -90,7 +98,15 @@ void print_list ( struct list *l) //List print
     }
    printf( "NULL\n" );
 }
-
+void print_table(struct list *l, int count)
+{
+    int i = 0;
+    for(i = 0; i < count; i++)
+    {
+        printf("List №%d\n", i);
+        print_list(&l[i]);
+    }
+}
 int list_find(struct list *l, value_t value) //list search
 {
    struct li *it;
@@ -173,7 +189,7 @@ int main()
    FILE* file;
    FILE* results;
    char* str = (char*)calloc(90, sizeof(char));
-   file = fopen("Book.txt","r+");
+   file = fopen("bk.txt","r+");
    results = fopen("Res.csv", "w+");
 
    while(!feof(file))
@@ -196,13 +212,13 @@ int main()
     fclose(file);
     for(i = 0; i < count; i++)
         fprintf(results, "%d, ", hash_table[i].size);
-
-   // for(i = 0; i < count; i++)
-   //     print_list(&hash_table[i]);
+   //print_table(hash_table, count);
 
 
 
-    delete_list(hash_table);
+    delete_hash_table(hash_table, count);
+
+
     fclose(results);
     free(str);
 
