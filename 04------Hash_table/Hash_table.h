@@ -89,7 +89,7 @@ int table_remove_str(struct Table* table, char* str)
             {
                 if(prev != l -> first)
                     {
-                        prev -> next = it -> next -> next;
+                        prev -> next = &it -> next -> next;
                         free(it -> next -> value);
                         free(it -> next);
                         l -> size--;
@@ -102,7 +102,7 @@ int table_remove_str(struct Table* table, char* str)
                     l -> first = NULL;
                 }
             }
-            prev = it;
+            prev = &it;
         }
 
         return 1;
@@ -134,4 +134,3 @@ void fill_table(struct Table* table, FILE* file)
     fclose(results);
 
 }
-
