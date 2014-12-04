@@ -28,7 +28,7 @@ int list_find(struct list *l, value_t value);                //list search
 
 
 /* For hash table*/
-struct Table* table_ctor(int count, unsigned int (*function(char *str)))
+struct Table* table_ctor(int count, unsigned int (*function(char *str)));
                                                                 //Create the table
 void table_dtor(struct Table* table);                           //Delete the table
 void fill_table(struct Table* table, FILE* file);               //Fills it from a file using the selected hash function
