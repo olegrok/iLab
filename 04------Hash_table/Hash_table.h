@@ -96,8 +96,8 @@ int table_remove_str(struct Table* table, char* str)
                 strcpy(it -> value, "");
                 it -> key = 0;
                 l -> size--;
+                return 1;
             }
-
         }
         assert(table);
     }
@@ -110,9 +110,15 @@ void fill_table(struct Table* table, FILE* file)
     struct list* hash_table = table -> hash_table;
     int count = table -> count;
     FILE* results;
+    results = fopen("Res.csv", "a");
+    if(file == NULL)
+    {
+        for(i = 0; i < count; i++)
+            fprintf(results, "%d, ", hash_table[i].size);
+        return;
+    }
     rewind(file);
     char* str = (char*)calloc(90, sizeof(char));
-    results = fopen("Res.csv", "a");
     while(!feof(file))
     {
         fscanf(file, "%s", str);
