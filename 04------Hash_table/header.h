@@ -32,6 +32,7 @@ struct Table* table_ctor(int count, unsigned int (*function(char *str)));
                                                                 //Create the table count size with selected function
 void table_dtor(struct Table* table);                           //Delete the table
 void fill_table(struct Table* table, FILE* file);               //Fills it from a file and unloads the statistics file.
+                                                                //Or if file == NULL: only unloads the statistics file.
 void print_table(struct Table* table);                          //Prints the contents of the table
 int table_remove_str(struct Table* table, char* str);           //Deletes a row from the table
 int table_add(struct Table* table, char* str);                  //Add a row from the table
