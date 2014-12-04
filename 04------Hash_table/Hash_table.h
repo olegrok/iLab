@@ -33,6 +33,7 @@ void table_dtor(struct Table* table)
 }
 int table_search(struct Table* table, char* str)
 {
+    assert(table);
     struct list* hash_table = table -> hash_table;
     int count = table -> count;
     unsigned int hash = 0;
@@ -45,6 +46,7 @@ int table_search(struct Table* table, char* str)
 }
 int table_add(struct Table* table, char* str)
 {
+    assert(table);
     struct list* hash_table = table -> hash_table;
     int count = table -> count;
     unsigned int hash = 0;
@@ -52,6 +54,7 @@ int table_add(struct Table* table, char* str)
     if(list_find(&hash_table[hash % count], str))
         return 0;
     insert_item(&hash_table[hash % count], hash, str);
+    assert(table);
     return 1;
 }
 void print_hash_massive(struct list *l, int count)
@@ -69,10 +72,12 @@ void print_table(struct Table* table)
     struct list* hash_table = table -> hash_table;
     int count = table -> count;
     print_hash_massive(hash_table, count);
+    table = NULL;
 
 }
 int table_remove_str(struct Table* table, char* str)
 {
+    assert(table);
     struct list* hash_table = table -> hash_table;
     int count = table -> count;
     assert(hash_table);
@@ -80,33 +85,23 @@ int table_remove_str(struct Table* table, char* str)
     hash = abs(table -> Funct(str));
     struct list* l = &hash_table[hash % count];
     struct li *it = NULL;
+    struct li *buf = NULL;
     struct li *prev = l -> first;
     if(list_find(l, str))
     {
-       for ( it = l -> first; it != NULL; it = it -> next )
+       for (it = l -> first; it != NULL; it = it -> next)
         {
             if (!strcmp(it -> value, str))
             {
-                if(prev != l -> first)
-                    {
-                        prev -> next = &it -> next -> next;
-                        free(it -> next -> value);
-                        free(it -> next);
-                        l -> size--;
-                    }
-                else
-                {
-                    free(l -> first -> value);
-                    free(l -> first);
-                    l -> size--;
-                    l -> first = NULL;
-                }
+                strcpy(it -> value, "");
+                it -> key = 0;
+                l -> size--;
             }
-            prev = &it;
-        }
 
-        return 1;
+        }
+        assert(table);
     }
+    assert(table);
     return _NOT_FOUND_;
 }
 void fill_table(struct Table* table, FILE* file)
