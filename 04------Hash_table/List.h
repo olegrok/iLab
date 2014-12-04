@@ -104,16 +104,7 @@ void print_list (struct list *l) //List print
         }
    printf( "NULL\n" );
 }
-void print_table(struct list *l, int count)
-{
-    assert(l);
-    int i = 0;
-    for(i = 0; i < count; i++)
-    {
-        printf("List №%d\n", i);
-        print_list(&l[i]);
-    }
-}
+
 int list_find(struct list *l, value_t value) //list search
 {
     assert(l);
@@ -121,17 +112,9 @@ int list_find(struct list *l, value_t value) //list search
     for ( it = l -> first; it != NULL; it = it -> next )
     {
         if (!strcmp(it -> value, value))
-        {
             return 1;
+        {
         }
     }
     return 0;
-}
-
-void punct(char* str)
-{
-    int last_symb = strlen(str) - 1;
-    if(iswpunct(str[last_symb]))
-        str[last_symb] = 0;
-
 }
