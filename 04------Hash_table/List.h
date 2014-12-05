@@ -58,7 +58,6 @@ struct li* new_list_item(key_t key, value_t value) //list's element constructor
 
 void delete_items(struct li* it) //list element destructor
 {
-    assert(it);
     if(it)
     {
         if (it -> next)
