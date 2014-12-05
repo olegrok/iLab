@@ -27,9 +27,9 @@ struct Table* table_ctor(int count, unsigned int (*function(char *str)))
 {
     assert(function);
     struct Table * ht = calloc(1, sizeof(struct Table));
-    ht -> count = count;
-    ht -> Funct = function;
-    ht -> hash_table = table_massive_ctor(count);
+    ht -> count       = count;
+    ht -> Funct       = function;
+    ht -> hash_table  = table_massive_ctor(count);
     return ht;
 
 }
@@ -111,18 +111,34 @@ int table_remove_str(struct Table* table, char* str)
     hash = abs(table -> Funct(str));
     struct list* l = &hash_table[hash % count];
     struct li *it = NULL;
+    struct li *prev = NULL;
+    struct li *buf;
     if(list_find(l, str))
     {
-       for (it = l -> first; it != NULL; it = it -> next)
+       for (it = l -> first; it != NULL;it = it -> next)
         {
             if (!strcmp(it -> value, str))
             {
-                strcpy(it -> value, "");
-                it -> key = 0;
+                if(it == l -> first)
+                {
+                    free(l -> first -> value);
+                    free(l -> first);
+                    l -> first = NULL;
+                }
+                else
+                {
+                    buf = it;
+                    it = it -> next;
+                    prev -> next = it;
+                    free(buf -> value);
+                    free(buf);
+                }
                 l -> size--;
                 assert(table);
                 return 1;
+
             }
+            prev = it;
         }
     }
     assert(table);
@@ -136,7 +152,7 @@ void fill_table(struct Table* table, FILE* file)
     unsigned int hash = 0, i = 0;
     struct list* hash_table = table -> hash_table;
     int count = table -> count;
-    FILE* results;
+    FILE* results = 0;
     results = fopen("Res.csv", "a");
     if(file == NULL)
     {
