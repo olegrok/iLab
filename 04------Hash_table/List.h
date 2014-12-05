@@ -1,6 +1,7 @@
 typedef int key_t;
 typedef char* value_t;
 
+
 struct li
 {
    key_t key;
@@ -8,11 +9,14 @@ struct li
    struct li* next;
 };
 
+
 struct list
 {
    struct li *first;
    int size;
 };
+
+
 
 
 void list_dump(struct list *l, int count)
@@ -23,6 +27,8 @@ void list_dump(struct list *l, int count)
         assert(&l[i]);
 
 }
+
+
 struct list* new_list(int count) //list constructor
 {
    int i = 0;
@@ -37,6 +43,7 @@ struct list* new_list(int count) //list constructor
    return res;
 }
 
+
 struct li* new_list_item(key_t key, value_t value) //list's element constructor
 {
     struct li *res = (struct li*) calloc(1, sizeof(struct li));
@@ -47,6 +54,7 @@ struct li* new_list_item(key_t key, value_t value) //list's element constructor
     assert(res);
     return res;
 }
+
 
 void delete_items(struct li* it) //list element destructor
 {
@@ -63,6 +71,7 @@ void delete_items(struct li* it) //list element destructor
     }
 }
 
+
 void delete_one_list(struct list *l) //list destructor
 {
     assert(l);
@@ -71,6 +80,7 @@ void delete_one_list(struct list *l) //list destructor
         delete_items(l -> first);
     }
 }
+
 
 void delete_hash_table(struct list *l, int count) //table destructor
 {
@@ -95,6 +105,7 @@ int insert_item(struct list *l, key_t key, value_t value) //add element
     return 1;
 }
 
+
 void print_list (struct list *l) //List print
 {
     assert(l);
@@ -107,6 +118,7 @@ void print_list (struct list *l) //List print
         }
    printf( "NULL\n" );
 }
+
 
 int list_find(struct list *l, value_t value) //list search
 {
