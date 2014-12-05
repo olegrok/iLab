@@ -9,7 +9,7 @@
     mystack_type Cx = 0;
     mystack_type Dx = 0;
 
-int proc_dump(mystack stk)
+int proc_dump(mystack stk)                  //Информация о процессоре
 {
     printf("Registers: \n");
     printf("\tAx %d\n", Ax);
@@ -26,10 +26,16 @@ int main()
 
 
     int* strcommand = (int*)calloc(j + 1,sizeof(int));
-    FILE *product;
-    assembler();
+    assert(strcommand);
+    FILE *product = 0;
+    assembler();                            //Перевод команд из текста в цифры
     product = fopen("Product.txt","r");
-
+    /*
+        Открываем файл, считываем из него команды и числа,
+        помещаем всё это в массив.
+        Распределяем введенные данные по массивам меток, команд, чисел.
+        Выполняем программу.
+    */
 
     while(!feof(product))                   //Считывание команд
     {
@@ -44,9 +50,8 @@ int main()
     mystack call_ret = stack_construct(1);  //Стек вызова
 
 
-    for(i = 0; strcommand[i]; i++)
+    for(i = 0; strcommand[i] && i <= j; i++)
     {
-        printf("[%d] %d\n",i, strcommand[i]);
         if(strcommand[i] < 0)
             continue;
         switch (strcommand[i])
@@ -73,15 +78,11 @@ int main()
                 break;
 
             case 5:                             //Mul
-                buf1 = stack_pop(stk);
-                buf2 = stack_pop(stk);
-                stack_push(stk, buf1 * buf2);
+                stack_push(stk, stack_pop(stk) * stack_pop(stk));
                 break;
 
             case 6:                             //Sub
-                buf1 = stack_pop(stk);
-                buf2 = stack_pop(stk);
-                stack_push(stk, buf2 - buf1);
+                stack_push(stk, -stack_pop(stk) + stack_pop(stk));
                 break;
 
             case 7:                             //Div
@@ -123,12 +124,10 @@ int main()
 
             case 16:                            //Cmp if (last > penultimate) := 1 if (last < penultimate) :=  0
                 buf1 = stack_pop(stk);
-                buf2 = stack_pop(stk);
-                if(buf1 > buf2)
+                if(buf1 > stack_top(stk))
                     buf3 = 1;
-                if(buf1 < buf2)
+                if(buf1 > stack_top(stk))
                     buf3 = 0;
-                stack_push(stk, buf2);
                 stack_push(stk, buf1);
                 stack_push(stk, buf3);
                 buf3 = 0;
@@ -137,12 +136,10 @@ int main()
             case 17:                            //Je JumpIF==
                 i++;
                 buf1 = stack_pop(stk);
-                buf2 = stack_pop(stk);
-                if(buf1 == buf2)
+                if(buf1 == stack_top(stk))
                     buf3 = 0;
                 else
                     buf3 = -1;
-                stack_push(stk, buf2);
                 stack_push(stk, buf1);
                 if(!buf3)
                     i = strcommand[i] - 1;
@@ -152,12 +149,10 @@ int main()
             case 18:                            //Jg last >
                 i++;
                 buf1 = stack_pop(stk);
-                buf2 = stack_pop(stk);
-                if(buf1 > buf2)
+                if(buf1 > stack_top(stk))
                     buf3 = 0;
                 else
                     buf3 = -1;
-                stack_push(stk, buf2);
                 stack_push(stk, buf1);
                 if(!buf3)
                     i = strcommand[i] - 1;
@@ -167,12 +162,10 @@ int main()
             case 19:                            //Jl last <
                 i++;
                 buf1 = stack_pop(stk);
-                buf2 = stack_pop(stk);
-                if(buf1 < buf2)
+                if(buf1 < stack_top(stk))
                     buf3 = 0;
                 else
                     buf3 = -1;
-                stack_push(stk, buf2);
                 stack_push(stk, buf1);
                 if(!buf3)
                     i = strcommand[i] - 1;
@@ -182,12 +175,10 @@ int main()
             case 20:                            //Jng last >=
                 i++;
                 buf1 = stack_pop(stk);
-                buf2 = stack_pop(stk);
-                if(buf1 >= buf2)
+                if(buf1 >= stack_top(stk))
                     buf3 = 0;
                 else
                     buf3 = -1;
-                stack_push(stk, buf2);
                 stack_push(stk, buf1);
                 if(!buf3)
                     i = strcommand[i] - 1;
@@ -197,12 +188,10 @@ int main()
             case 21:                            //Jnl jast <=
                 i++;
                 buf1 = stack_pop(stk);
-                buf2 = stack_pop(stk);
-                if(buf1 <= buf2)
+                if(buf1 <= stack_top(stk))
                     buf3 = 0;
                 else
                     buf3 = -1;
-                stack_push(stk, buf2);
                 stack_push(stk, buf1);
                 if(!buf3)
                     i = strcommand[i] - 1;
@@ -223,7 +212,6 @@ int main()
 
 
         }
-       stack_dump(stk);
 
     }
     proc_dump(stk);
@@ -232,4 +220,3 @@ int main()
     free(strcommand);
     return 0;
 }
-
