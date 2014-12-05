@@ -27,15 +27,20 @@ int StackOK(const struct stack_t* stk)
    void AssertStack(const struct stack_t* Stack, char name_function[])
     {
         if(!StackOK(Stack))
-            {
-                stack_dump(Stack);
-                printf("Function: %s\n", name_function);
-            }
+        {
+            stack_dump(Stack);
+            printf("Function: %s\n", name_function);
+        }
         assert(StackOK(Stack));
     }
 
     int stack_dump(const struct stack_t* Stack)
     {
+        if(!StackOK(Stack))
+        {
+            printf("Invalid stack or not stack");
+            return 0;
+        }
         int i = 0;
         printf("\n");
         printf("-------------------------------------------------\n");
@@ -76,7 +81,9 @@ int StackOK(const struct stack_t* stk)
 struct stack_t* stack_construct(int stack_size)
     {
         struct stack_t *Stack = (struct stack_t*)calloc(1, sizeof(struct stack_t));
+        assert(Stack);
         Stack -> data = (int*)calloc(stack_size + 1, sizeof(int));
+        assert(Stack -> data);
         Stack -> Max = stack_size;
         Stack -> Count = 0;
         AssertStack(Stack, (char*)__FUNCTION__);
@@ -85,6 +92,11 @@ struct stack_t* stack_construct(int stack_size)
 
 int stack_destruct(struct stack_t* Stack)
     {
+        if(!StackOK(Stack))
+        {
+            printf("Invalid stack or not stack");
+            return 0;
+        }
         int i = 0;
         for(i = 0; i < Stack -> Count; i++)
             {
