@@ -47,8 +47,10 @@ struct li* new_list_item(key_t key, value_t value) //list's element constructor
     assert(res);
     return res;
 }
+
 void delete_items(struct li* it) //list element destructor
 {
+    assert(it);
     if(it)
     {
         if (it -> next)
@@ -72,6 +74,7 @@ void delete_one_list(struct list *l) //list destructor
 
 void delete_hash_table(struct list *l, int count) //table destructor
 {
+    assert(l);
     int i = 0;
     for(i = 0; i < count; i++)
         delete_one_list(&l[i]);
@@ -113,8 +116,6 @@ int list_find(struct list *l, value_t value) //list search
     {
         if (!strcmp(it -> value, value))
             return 1;
-        {
-        }
     }
     return 0;
 }
