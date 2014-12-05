@@ -73,15 +73,17 @@ cchar Sqrt[5] =     "sqrt";
 
 int assembler()
 {
-    FILE *sourse;
-    FILE *product;
-    char command[15], valuestr[50], buf[50];
+    FILE *sourse = 0;
+    FILE *product = 0;
+    char command[15] = {}, valuestr[50] = {}, buf[50] = {};
     int i = 0, j = 0, k = 0;
-    mystack_type points_int[100];
-    char points_char[100][100];
+    mystack_type points_int[100] = {};
+    char points_char[100][100] = {};
     sourse = fopen("Source.txt","r");
     product = fopen("Product.txt","w+");
 
+
+    //Считывание меток
     while(!feof(sourse))
     {
         fscanf(sourse, "%s", command);
@@ -89,7 +91,6 @@ int assembler()
             {
                 strncpy(points_char[j], command, strlen(command) - 1);
                 points_int[j] = i + 1;
-                printf("j: %d   i: %d  com: %s  \n", j, points_int[j], points_char[j]);
                 j++;
 
             }
@@ -99,20 +100,18 @@ int assembler()
 
     rewind(sourse);
 
+    //Считывание команд и чисел
     while(!feof(sourse))
     {
         fscanf(sourse, "%s", command);
-        printf("%s \n", command);
 
         if(command[strlen(command) - 1] == Point)
             {
                 command[strlen(command) - 1] = 0;
-                printf("com: %s  \n", command);
                 for(k = 0; k < j; k++)
                 if(strcmp(command, points_char[k]) == 0)
                     {
                         fprintf(product, "%d\n", -points_int[k]);
-                        printf("char: %s int: %d \n", points_char[k], points_int[k]);
                         break;
                     }
 
@@ -278,55 +277,5 @@ int assembler()
 
     fprintf(product, "%s", "\0");
     fclose(sourse);
-    fclose(product);
-}
-int disassembler()
-{
-    FILE *sourseimage;
-    FILE *product;
-    int command;
-    char valuestr[15];
-    product = fopen("Product.txt","r");
-    sourseimage = fopen("Sourseimage.txt","w+");
-    while(!feof(product))
-    {
-        fscanf(product, "%d", &command);
-        switch (command)
-        {
-            case 0:
-                fprintf(sourseimage, "%s\n", End);
-                fclose(sourseimage);
-                fclose(product);
-                return 0;
-                break;
-            case 1:
-                fprintf(sourseimage, "%s ", Push);
-                fscanf(product, "%s", valuestr);
-                fprintf(sourseimage, "%s\n", valuestr);
-                break;
-            case 2:
-                fprintf(sourseimage, "%s\n", Pop);
-                break;
-            case 3:
-                fprintf(sourseimage, "%s\n", Add);
-                break;
-            case 4:
-                fprintf(sourseimage, "%s ", Jump);
-                fscanf(product, "%s", valuestr);
-                fprintf(sourseimage, "%s\n", valuestr);
-                break;
-            case 5:
-                fprintf(sourseimage, "%s\n", Mul);
-                break;
-            case 6:
-                fprintf(sourseimage, "%s\n", Sub);
-                break;
-            case 7:
-                fprintf(sourseimage, "%s\n", Div);
-                break;
-        }
-    }
-
-    fclose(sourseimage);
     fclose(product);
 }
