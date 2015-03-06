@@ -11,16 +11,19 @@ class Stack
         Stack();
         Stack(int size);
         ~Stack();
+
+        void dump() const;
+
         bool push(stack_t val);
         stack_t pop();
-        void dump() const;
-        bool StOk() const;
-        void StAssert() const;
-        bool StCheck() const;
         stack_t peek() const;
 
 
-    //private:
+    private:
+        bool StOk() const;
+        void StAssert() const;
+        bool StCheck() const;
+
         stack_t* data;
         int count;
         int max;
@@ -33,7 +36,7 @@ Stack::Stack():
     count(0),
     max(10)
     {
-        std::cout << "Created stack " << max << " elements" << std::endl;
+        //std::cout << "Created stack " << max << " elements" << std::endl;
         StCheck();
     }
 
@@ -42,14 +45,14 @@ Stack::Stack(int size):
     count(0),
     max(size)
     {
-        std::cout << "Created stack " << max << " elements" << std::endl;
+        //std::cout << "Created stack " << max << " elements" << std::endl;
     }
 
 Stack::~Stack()
 {
     if(StOk())
     {
-        std::cout << "Deleted stack " << max << " elements" << std::endl;
+        //std::cout << "Deleted stack " << max << " elements" << std::endl;
         free(data);
         data = NULL;
         count = -1;
@@ -100,6 +103,10 @@ void Stack::dump() const
         }
     std::cout << "\n\n";
 }
+
+
+
+
 bool Stack::StOk() const
 {
     if(this && this -> data && max > 0)
@@ -124,6 +131,11 @@ bool Stack::StCheck() const
 }
 
 
+
+
+
+
+
 bool Stack::push(stack_t val)
 {
     StCheck();
@@ -139,7 +151,6 @@ bool Stack::push(stack_t val)
     StCheck();
     return 1;
 }
-
 
 stack_t Stack::pop()
 {
@@ -186,7 +197,8 @@ int main()
     std::cout << s1.peek() << "\n";
     std::cout << s1.peek() << "\n";
     //s1.data = 0;
-    s1.StAssert();
+    s1.dump();
+    //s1.StAssert();
 
     return 0;
 }
