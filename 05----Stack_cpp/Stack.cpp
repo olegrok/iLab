@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cassert>
 #include <cstdlib>
-#include <cstring>
 #include <vector>
+
 
 
 template < typename stack_t >
@@ -18,19 +18,20 @@ class Stack
         bool push(stack_t val);
         stack_t pop();
         stack_t peek() const;
+        int Size() const;
 
 
-    //private:
+    private:
         bool Ok() const;
         void Assert() const;
         bool Check() const;
-
-        //stack_t* data;
         std::vector<stack_t> data;
         int count;
-        //int max;
+
 
 };
+
+
 
 template < typename stack_t >
 Stack <stack_t>::Stack():
@@ -39,6 +40,8 @@ Stack <stack_t>::Stack():
     {
         Check();
     }
+
+
 
 template < typename stack_t >
 Stack<stack_t>::Stack(int size):
@@ -49,6 +52,8 @@ Stack<stack_t>::Stack(int size):
         data.reserve(size);
         Check();
     }
+
+
 
 template < typename stack_t >
 Stack<stack_t>::~Stack()
@@ -63,6 +68,15 @@ Stack<stack_t>::~Stack()
 }
 
 
+
+template < typename stack_t >
+int Stack<stack_t>::Size() const
+{
+    return count;
+}
+
+
+
 template < typename stack_t >
 bool Stack<stack_t>::isEmpty() const
 {
@@ -70,6 +84,8 @@ bool Stack<stack_t>::isEmpty() const
         return true;
     return false;
 }
+
+
 
 template < typename stack_t >
 bool Stack<stack_t>::Ok() const
@@ -104,13 +120,14 @@ void Stack<stack_t>::dump() const
 
 
 
-
 template < typename stack_t >
 void Stack<stack_t>::Assert() const
 {
     dump();
     assert(Ok());
 }
+
+
 
 template < typename stack_t >
 bool Stack<stack_t>::Check() const
@@ -121,6 +138,7 @@ bool Stack<stack_t>::Check() const
         Assert();
     return false;
 }
+
 
 
 template < typename stack_t >
@@ -143,6 +161,7 @@ bool Stack<stack_t>::push(stack_t val)
 }
 
 
+
 template < typename stack_t >
 stack_t Stack<stack_t>::pop()
 {
@@ -157,6 +176,8 @@ stack_t Stack<stack_t>::pop()
     val = data[--count];
     return val;
 }
+
+
 
 template < typename stack_t >
 stack_t Stack<stack_t>::peek() const
@@ -176,31 +197,31 @@ int main()
 {
     Stack<int> s1(10);
     Stack<int> s2;
-    s1.push(5);
-    s1.push(1);
-    s1.dump();
-    s1.push(2);
-    s1.push(2);
-    s1.push(2);
-    s1.push(2);
-    s1.push(0);
-    s1.dump();
-    std::cout << s1.peek() << "\n";
-    std::cout << s1.peek() << "\n";
-    std::cout << s1.peek() << "\n";
-    s1.dump();
-    std::cout << s1.pop() << "\n";
-    std::cout << s1.pop() << "\n";
-    std::cout << s1.pop() << "\n";
-    std::cout << s1.pop() << "\n";
-    s1.dump();
-    std::cout << s1.peek() << "\n";
-    std::cout << s1.peek() << "\n";
-    s1.push(1);
-    s1.push(9);
-    s1.push(9);
-    s1.push(6);
-    s1.dump();
+    s2.push(5);
+    s2.push(1);
+    s2.dump();
+    s2.push(2);
+    s2.push(2);
+    s2.push(2);
+    s2.push(2);
+    s2.push(0);
+    s2.dump();
+    std::cout << s2.peek() << "\n";
+    std::cout << s2.peek() << "\n";
+    std::cout << s2.peek() << "\n";
+    s2.dump();
+    std::cout << s2.pop() << "\n";
+    std::cout << s2.pop() << "\n";
+    std::cout << s2.pop() << "\n";
+    std::cout << s2.pop() << "\n";
+    s2.dump();
+    std::cout << s2.peek() << "\n";
+    std::cout << s2.peek() << "\n";
+    s2.push(1);
+    s2.push(9);
+    s2.push(9);
+    s2.push(6);
+    s2.dump();
 
     return 0;
 }
