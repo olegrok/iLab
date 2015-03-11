@@ -2,9 +2,10 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
+#include <vector>
 
-typedef double stack_t;
 
+template < typename stack_t >
 class Stack
 {
     public:
@@ -13,93 +14,90 @@ class Stack
         ~Stack();
 
         void dump() const;
-
+        bool isEmpty() const;
         bool push(stack_t val);
         stack_t pop();
         stack_t peek() const;
 
 
-    private:
-        bool StOk() const;
-        void StAssert() const;
-        bool StCheck() const;
+    //private:
+        bool Ok() const;
+        void Assert() const;
+        bool Check() const;
 
-        stack_t* data;
+        //stack_t* data;
+        std::vector<stack_t> data;
         int count;
-        int max;
+        //int max;
 
 };
 
-
-Stack::Stack():
-    data((stack_t*)calloc(10, sizeof(stack_t))),
+template < typename stack_t >
+Stack <stack_t>::Stack():
     count(0),
-    max(10)
+    data(10)
     {
-        //std::cout << "Created stack " << max << " elements" << std::endl;
-        StCheck();
+        Check();
     }
 
-Stack::Stack(int size):
-    data((stack_t*)calloc(size, sizeof(stack_t))),
-    count(0),
-    max(size)
+template < typename stack_t >
+Stack<stack_t>::Stack(int size):
+
+    data(size),
+    count(0)
     {
-        //std::cout << "Created stack " << max << " elements" << std::endl;
+        data.reserve(size);
+        Check();
     }
 
-Stack::~Stack()
+template < typename stack_t >
+Stack<stack_t>::~Stack()
 {
-    if(StOk())
+    if(Ok())
     {
-        //std::cout << "Deleted stack " << max << " elements" << std::endl;
-        free(data);
-        data = NULL;
         count = -1;
-        max = -1;
+        data.clear();
     }
     else
         std::cout << "Invalid stack. Did not delete" << std::endl;
 }
 
 
+template < typename stack_t >
+bool Stack<stack_t>::isEmpty() const
+{
+    if(!count)
+        return true;
+    return false;
+}
+
+template < typename stack_t >
+bool Stack<stack_t>::Ok() const
+{
+    if(count >= 0 && data.max_size() >= count)
+        return true;
+    else
+        return false;
+}
 
 
 
-
-
-
-
-
-
-
-void Stack::dump() const
+template < typename stack_t >
+void Stack<stack_t>::dump() const
 {
     std::cout << "\n\n";
     std::cout << "\tStack dump" << std::endl;
-    std::cout << "\tData: " << data <<std:: endl;
-
     std::cout << "\tCount: ";
-    if(StOk())
+    if(Ok())
          std::cout << count <<std:: endl;
     else
         std::cout << "?" <<std:: endl;
+    std::cout << "\n";
 
-    std::cout << "\tMax: ";
-    if(StOk())
-         std::cout << max <<std:: endl;
-    else
-        std::cout << "?" <<std:: endl;
-    std::cout << "\n\n";
-
-    if(StOk())
-        for(int i = 0; i < max; i++)
+    if(Ok())
+        for(int i = 0; i < /*count*/ data.size(); i++)
         {
-            std::cout <<"\t[" << i << "]" << " = " << data[i] << " ";
-            if(i < count)
-                std::cout << "*\n";
-            else
-                std::cout << "\n";
+            std::cout <<"\t[" << i << "]" << " = " << data[i] << "\n";
         }
     std::cout << "\n\n";
 }
@@ -107,69 +105,67 @@ void Stack::dump() const
 
 
 
-bool Stack::StOk() const
-{
-    if(this && this -> data && max > 0)
-        return 1;
-    else
-        return 0;
-}
-
-void Stack::StAssert() const
+template < typename stack_t >
+void Stack<stack_t>::Assert() const
 {
     dump();
-    assert(StOk());
+    assert(Ok());
 }
 
-bool Stack::StCheck() const
+template < typename stack_t >
+bool Stack<stack_t>::Check() const
 {
-    if(StOk())
-        return 1;
+    if(Ok())
+        return true;
     else
-        StAssert();
-    return 0;
+        Assert();
+    return false;
 }
 
 
-
-
-
-
-
-bool Stack::push(stack_t val)
+template < typename stack_t >
+bool Stack<stack_t>::push(stack_t val)
 {
-    StCheck();
-    if(count == max)
+    Check();
+
+    if(data.size() > count)
     {
-        data = (stack_t*)realloc(data, sizeof(stack_t) * (max + 4));
-        max += 4;
+        data[count] = val;
+        count++;
     }
-
-
-    data[count++] = val;
-
-    StCheck();
-    return 1;
+    else
+    {
+        data.insert(data.begin() + count, val);
+        count++;
+    }
+    Check();
+    return true;
 }
 
-stack_t Stack::pop()
+
+template < typename stack_t >
+stack_t Stack<stack_t>::pop()
 {
-    StCheck();
+    stack_t val = 0;
+    Check();
     if(count == 0)
     {
         std::cout << "\nStack is empty!\n Returned NULL\n";
         return NULL;
     }
-    return data[--count];
+    data.erase(data.begin() + count - 1);
+    val = data[--count];
+    return val;
 }
 
-stack_t Stack::peek() const
+template < typename stack_t >
+stack_t Stack<stack_t>::peek() const
 {
-    StCheck();
+    Check();
     if(count == 0)
     {
         std::cout << "\nStack is empty!\n Returned NULL\n";
-        return NULL;
+        return (stack_t)NULL;
     }
     return data[count - 1];
 }
@@ -178,27 +174,33 @@ stack_t Stack::peek() const
 
 int main()
 {
-    Stack s1(2);
-    Stack s2;
+    Stack<int> s1(10);
+    Stack<int> s2;
     s1.push(5);
     s1.push(1);
-    //s1.push(2);
-    //s1.push(2);
-    //s1.push(2);
-    //s1.push(2);
-    //s1.push(0);
-    std::cout << s1.peek() << "\n";
-    std::cout << s1.peek() << "\n";
-    std::cout << s1.peek() << "\n";
-    std::cout << s1.pop() << "\n";
-    std::cout << s1.pop() << "\n";
-    std::cout << s1.pop() << "\n";
-    std::cout << s1.pop() << "\n";
-    std::cout << s1.peek() << "\n";
-    std::cout << s1.peek() << "\n";
-    //s1.data = 0;
     s1.dump();
-    //s1.StAssert();
+    s1.push(2);
+    s1.push(2);
+    s1.push(2);
+    s1.push(2);
+    s1.push(0);
+    s1.dump();
+    std::cout << s1.peek() << "\n";
+    std::cout << s1.peek() << "\n";
+    std::cout << s1.peek() << "\n";
+    s1.dump();
+    std::cout << s1.pop() << "\n";
+    std::cout << s1.pop() << "\n";
+    std::cout << s1.pop() << "\n";
+    std::cout << s1.pop() << "\n";
+    s1.dump();
+    std::cout << s1.peek() << "\n";
+    std::cout << s1.peek() << "\n";
+    s1.push(1);
+    s1.push(9);
+    s1.push(9);
+    s1.push(6);
+    s1.dump();
 
     return 0;
 }
